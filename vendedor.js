@@ -2,8 +2,7 @@
 //  vendedor.js — Lógica del Panel de Vendedor Daysmell
 // ============================================================
 
-// ─── CREDENCIALES DE VENDEDORES ───
-// Puedes agregar más vendedores aquí
+// ─── 
 const SELLER_ACCOUNTS = [
   { email: 'admin@daysmell.com', password: 'admin123', nombre: 'Admin', rol: 'Administrador' },
   { email: 'vendedor@daysmell.com', password: 'vende123', nombre: 'Vendedor', rol: 'Vendedor' }
