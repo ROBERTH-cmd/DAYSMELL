@@ -1,0 +1,179 @@
+// ============================================================
+//  products.js — Catálogo de productos Daysmell
+//  Puedes editar esta lista manualmente O cargar un Excel
+// ============================================================
+
+const defaultProducts = [
+  {
+    id: 1,
+    nombre: "Air Max Pulse",
+    marca: "Nike",
+    categoria: "sneakers",
+    precio: 389000,
+    precio_original: 459000,
+    descuento: 15,
+    stock: 12,
+    imagen: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+    descripcion: "Zapatilla deportiva con tecnología Air Max de última generación.",
+    es_nuevo: true,
+    es_eco: false
+  },
+  {
+    id: 2,
+    nombre: "Ultra Boost 23",
+    marca: "Adidas",
+    categoria: "sneakers",
+    precio: 420000,
+    precio_original: 0,
+    descuento: 0,
+    stock: 8,
+    imagen: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop",
+    descripcion: "Running con retorno de energía Boost incomparable.",
+    es_nuevo: true,
+    es_eco: false
+  },
+  {
+    id: 3,
+    nombre: "Vestido Floral Midi",
+    marca: "Zara",
+    categoria: "mujer",
+    precio: 185000,
+    precio_original: 250000,
+    descuento: 26,
+    stock: 3,
+    imagen: "https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=400&h=400&fit=crop",
+    descripcion: "Vestido midi con estampado floral, perfecto para ocasiones especiales.",
+    es_nuevo: false,
+    es_eco: false
+  },
+  {
+    id: 4,
+    nombre: "Chaqueta Cuero Sintético",
+    marca: "Pull&Bear",
+    categoria: "mujer",
+    precio: 310000,
+    precio_original: 0,
+    descuento: 0,
+    stock: 6,
+    imagen: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop",
+    descripcion: "Chaqueta estilo moto en cuero sintético de alta calidad.",
+    es_nuevo: true,
+    es_eco: false
+  },
+  {
+    id: 5,
+    nombre: "Camisa Oxford Premium",
+    marca: "Tommy Hilfiger",
+    categoria: "hombre",
+    precio: 165000,
+    precio_original: 220000,
+    descuento: 25,
+    stock: 15,
+    imagen: "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1?w=400&h=400&fit=crop",
+    descripcion: "Camisa Oxford 100% algodón, ideal para el trabajo o eventos.",
+    es_nuevo: false,
+    es_eco: false
+  },
+  {
+    id: 6,
+    nombre: "Jean Slim Fit",
+    marca: "Levi's",
+    categoria: "hombre",
+    precio: 210000,
+    precio_original: 0,
+    descuento: 0,
+    stock: 20,
+    imagen: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop",
+    descripcion: "Jean clásico slim fit con lavado oscuro. Versátil y duradero.",
+    es_nuevo: false,
+    es_eco: true
+  },
+  {
+    id: 7,
+    nombre: "Perfume Sauvage EDT",
+    marca: "Dior",
+    categoria: "perfumes",
+    precio: 380000,
+    precio_original: 450000,
+    descuento: 16,
+    stock: 5,
+    imagen: "https://images.unsplash.com/photo-1541643600914-78b084683702?w=400&h=400&fit=crop",
+    descripcion: "Fragancia masculina fresca y amaderada. 100ml.",
+    es_nuevo: false,
+    es_eco: false
+  },
+  {
+    id: 8,
+    nombre: "Coco Mademoiselle EDP",
+    marca: "Chanel",
+    categoria: "perfumes",
+    precio: 520000,
+    precio_original: 0,
+    descuento: 0,
+    stock: 4,
+    imagen: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=400&fit=crop",
+    descripcion: "Fragancia femenina icónica con notas cítricas y florales. 100ml.",
+    es_nuevo: false,
+    es_eco: false
+  },
+  {
+    id: 9,
+    nombre: "Tenis Eco Runner",
+    marca: "Patagonia",
+    categoria: "eco",
+    precio: 280000,
+    precio_original: 0,
+    descuento: 0,
+    stock: 9,
+    imagen: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=400&fit=crop",
+    descripcion: "Tenis fabricados con materiales reciclados 80%. Huella mínima.",
+    es_nuevo: true,
+    es_eco: true
+  },
+  {
+    id: 10,
+    nombre: "Mochila Sostenible",
+    marca: "EcoLife",
+    categoria: "eco",
+    precio: 145000,
+    precio_original: 190000,
+    descuento: 24,
+    stock: 7,
+    imagen: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+    descripcion: "Mochila hecha con plástico reciclado del océano. 25L.",
+    es_nuevo: false,
+    es_eco: true
+  },
+  {
+    id: 11,
+    nombre: "Zapatilla Star Runner",
+    marca: "New Balance",
+    categoria: "ninos",
+    precio: 175000,
+    precio_original: 220000,
+    descuento: 20,
+    stock: 11,
+    imagen: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=400&h=400&fit=crop",
+    descripcion: "Zapatilla deportiva para niños de 4 a 12 años. Varios colores.",
+    es_nuevo: false,
+    es_eco: false
+  },
+  {
+    id: 12,
+    nombre: "Vestido Outlet Verano",
+    marca: "H&M",
+    categoria: "outlet",
+    precio: 65000,
+    precio_original: 150000,
+    descuento: 57,
+    stock: 2,
+    imagen: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400&h=400&fit=crop",
+    descripcion: "Vestido de verano a precio increíble. Últimas unidades.",
+    es_nuevo: false,
+    es_eco: false
+  }
+];
+
+// Esta variable es la que se usa en toda la app
+// Se reemplaza cuando se carga un Excel
+window.PRODUCTS = [...defaultProducts];

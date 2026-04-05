@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daysmell — Panel Vendedor</title>
+  <link rel="stylesheet" href="vendedor.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-view">
+
+  <!-- ══════ LOGIN VENDEDOR ══════ -->
+  <div id="seller-login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="brand-mark">✦</span>
+        <h1>Daysmell</h1>
+        <span class="panel-label">Panel de Vendedor</span>
+      </div>
+      <form id="seller-login-form" onsubmit="sellerLogin(event)">
+        <div class="field-group">
+          <label><i class="fas fa-envelope"></i> Correo</label>
+          <input type="email" id="sl-email" placeholder="vendedor@daysmell.com" required autocomplete="off">
+        </div>
+        <div class="field-group">
+          <label><i class="fas fa-lock"></i> Contraseña</label>
+          <input type="password" id="sl-password" placeholder="••••••••" required>
+          <small class="hint">Demo: admin@daysmell.com / admin123</small>
+        </div>
+        <button type="submit" class="btn-login-seller">
+          <i class="fas fa-sign-in-alt"></i> Entrar al panel
+        </button>
+      </form>
+      <a href="index.html" class="link-back">
+        <i class="fas fa-arrow-left"></i> Ir a la tienda
+      </a>
+    </div>
+  </div>
+
+  <!-- ══════ DASHBOARD ══════ -->
+  <div id="dashboard" class="dashboard" style="display:none">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark">✦</span>
+        <span class="brand-name">Daysmell</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Principal</div>
+        <a class="nav-link active" onclick="showSection('overview')" data-section="overview">
+          <i class="fas fa-chart-pie"></i><span>Resumen</span>
+        </a>
+        <a class="nav-link" onclick="showSection('products')" data-section="products">
+          <i class="fas fa-box"></i><span>Productos</span>
+          <span class="nav-badge" id="nav-prod-count">0</span>
+        </a>
+        <a class="nav-link" onclick="showSection('orders')" data-section="orders">
+          <i class="fas fa-shopping-bag"></i><span>Pedidos</span>
+          <span class="nav-badge pending" id="nav-orders-count">0</span>
+        </a>
+        <a class="nav-link" onclick="showSection('customers')" data-section="customers">
+          <i class="fas fa-users"></i><span>Clientes</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:1.5rem">Catálogo</div>
+        <a class="nav-link" onclick="showSection('add-product')" data-section="add-product">
+          <i class="fas fa-plus-circle"></i><span>Agregar producto</span>
+        </a>
+        <a class="nav-link" onclick="showSection('import')" data-section="import">
+          <i class="fas fa-file-excel"></i><span>Importar Excel</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="seller-avatar" id="seller-avatar-sidebar">V</div>
+        <div class="seller-info-mini">
+          <span id="seller-name-sidebar">Vendedor</span>
+          <small>Administrador</small>
+        </div>
+        <button class="btn-logout" onclick="sellerLogout()" title="Cerrar sesión">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <div class="main-area">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="btn-menu-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="topbar-title" id="topbar-title">Resumen</div>
+        <div class="topbar-right">
+          <a href="index.html" target="_blank" class="btn-view-store">
+            <i class="fas fa-store"></i> Ver tienda
+          </a>
+          <div class="topbar-seller">
+            <div class="seller-avatar sm" id="seller-avatar-top">V</div>
+            <span id="seller-name-top">Vendedor</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Sections -->
+      <div class="content-area">
+
+        <!-- ── OVERVIEW ── -->
+        <section id="section-overview" class="section active">
+          <div class="section-header">
+            <h2>Resumen del negocio</h2>
+            <span class="date-badge" id="today-date"></span>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i class="fas fa-box"></i></div>
+              <div class="stat-body">
+                <span class="stat-value" id="stat-products">0</span>
+                <span class="stat-label">Productos activos</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i class="fas fa-shopping-bag"></i></div>
+              <div class="stat-body">
+                <span class="stat-value" id="stat-orders">0</span>
+                <span class="stat-label">Pedidos totales</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon gold"><i class="fas fa-dollar-sign"></i></div>
+              <div class="stat-body">
+                <span class="stat-value" id="stat-revenue">$0</span>
+                <span class="stat-label">Ingresos estimados</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+              <div class="stat-body">
+                <span class="stat-value" id="stat-customers">0</span>
+                <span class="stat-label">Clientes registrados</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>Productos por categoría</h3>
+              </div>
+              <div class="card-body">
+                <div id="category-breakdown"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Stock bajo ⚠️</h3>
+                <span class="badge-danger" id="low-stock-count">0</span>
+              </div>
+              <div class="card-body">
+                <div id="low-stock-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PRODUCTS ── -->
+        <section id="section-products" class="section">
+          <div class="section-header">
+            <h2>Gestión de productos</h2>
+            <div class="header-actions">
+              <div class="search-mini">
+                <i class="fas fa-search"></i>
+                <input type="text" id="prod-search" placeholder="Buscar..." oninput="filterProductTable()">
+              </div>
+              <select id="prod-cat-filter" onchange="filterProductTable()">
+                <option value="">Todas las categorías</option>
+                <option value="sneakers">Sneakers</option>
+                <option value="mujer">Mujer</option>
+                <option value="hombre">Hombre</option>
+                <option value="outlet">Outlet</option>
+                <option value="ninos">Niños</option>
+                <option value="eco">Eco</option>
+                <option value="perfumes">Perfumes</option>
+              </select>
+              <button class="btn-primary" onclick="showSection('add-product')">
+                <i class="fas fa-plus"></i> Nuevo producto
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <table class="data-table" id="products-table">
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Descuento</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── ADD / EDIT PRODUCT ── -->
+        <section id="section-add-product" class="section">
+          <div class="section-header">
+            <h2 id="form-section-title">Agregar producto</h2>
+            <button class="btn-secondary" onclick="showSection('products')">
+              <i class="fas fa-arrow-left"></i> Volver
+            </button>
+          </div>
+
+          <div class="form-card">
+            <form id="product-form" onsubmit="saveProduct(event)">
+              <input type="hidden" id="edit-product-id">
+
+              <div class="form-grid">
+                <div class="field-group">
+                  <label>Nombre del producto *</label>
+                  <input type="text" id="pf-nombre" placeholder="Ej: Air Max 90" required>
+                </div>
+                <div class="field-group">
+                  <label>Marca *</label>
+                  <input type="text" id="pf-marca" placeholder="Ej: Nike" required>
+                </div>
+                <div class="field-group">
+                  <label>Categoría *</label>
+                  <select id="pf-categoria" required>
+                    <option value="">Seleccionar...</option>
+                    <option value="sneakers">Sneakers</option>
+                    <option value="mujer">Mujer</option>
+                    <option value="hombre">Hombre</option>
+                    <option value="outlet">Outlet</option>
+                    <option value="ninos">Niños</option>
+                    <option value="eco">Eco</option>
+                    <option value="perfumes">Perfumes</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label>Precio (COP) *</label>
+                  <input type="number" id="pf-precio" placeholder="350000" min="0" required>
+                </div>
+                <div class="field-group">
+                  <label>Precio original (antes del descuento)</label>
+                  <input type="number" id="pf-precio-original" placeholder="420000" min="0">
+                </div>
+                <div class="field-group">
+                  <label>Descuento (%)</label>
+                  <input type="number" id="pf-descuento" placeholder="0" min="0" max="100">
+                </div>
+                <div class="field-group">
+                  <label>Stock *</label>
+                  <input type="number" id="pf-stock" placeholder="10" min="0" required>
+                </div>
+                <div class="field-group">
+                  <label>URL de imagen</label>
+                  <input type="url" id="pf-imagen" placeholder="https://...">
+                </div>
+              </div>
+
+              <div class="field-group full-width">
+                <label>Descripción</label>
+                <textarea id="pf-descripcion" placeholder="Describe el producto..." rows="3"></textarea>
+              </div>
+
+              <div class="checkbox-row">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="pf-nuevo">
+                  <span>Marcar como NUEVO</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="pf-eco">
+                  <span>🌿 Producto ECO</span>
+                </label>
+              </div>
+
+              <!-- Preview imagen -->
+              <div class="image-preview-wrap" id="image-preview-wrap" style="display:none">
+                <label>Vista previa de imagen:</label>
+                <img id="image-preview" src="" alt="Preview">
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="resetProductForm(); showSection('products')">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn-primary" id="save-btn">
+                  <i class="fas fa-save"></i> Guardar producto
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ── ORDERS ── -->
+        <section id="section-orders" class="section">
+          <div class="section-header">
+            <h2>Pedidos</h2>
+          </div>
+          <div class="card">
+            <div id="orders-content" class="empty-panel">
+              <i class="fas fa-shopping-bag"></i>
+              <p>Los pedidos aparecerán aquí cuando los compradores finalicen sus compras.</p>
+              <small>Para conectar pedidos reales necesitarás un backend (Node.js, Firebase, etc.)</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── CUSTOMERS ── -->
+        <section id="section-customers" class="section">
+          <div class="section-header">
+            <h2>Clientes registrados</h2>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Fecha registro</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-tbody"></tbody>
+              </table>
+            </div>
+            <div id="no-customers" class="empty-panel" style="display:none">
+              <i class="fas fa-users"></i>
+              <p>Aún no hay clientes registrados.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── IMPORT EXCEL ── -->
+        <section id="section-import" class="section">
+          <div class="section-header">
+            <h2>Importar desde Excel</h2>
+          </div>
+
+          <div class="import-steps">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Descarga la plantilla</h4>
+                <p>Usa nuestra plantilla Excel con el formato correcto para tus productos.</p>
+                <button class="btn-primary" onclick="downloadTemplate()">
+                  <i class="fas fa-download"></i> Descargar plantilla
+                </button>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Llena tus productos</h4>
+                <p>Completa la información en el Excel: nombre, precio, stock, categoría, imagen, etc.</p>
+                <div class="columns-list">
+                  <code>nombre</code><code>marca</code><code>categoria</code><code>precio</code>
+                  <code>precio_original</code><code>descuento</code><code>stock</code>
+                  <code>imagen</code><code>descripcion</code><code>nuevo</code><code>eco</code>
+                </div>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Carga el archivo</h4>
+                <p>Selecciona tu Excel y los productos se importarán automáticamente.</p>
+                <label class="btn-primary" for="excel-upload-panel">
+                  <i class="fas fa-upload"></i> Cargar Excel
+                </label>
+                <input type="file" id="excel-upload-panel" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExcelUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="import-result" style="display:none">
+            <div class="card-header">
+              <h3 id="import-result-title">Resultado de importación</h3>
+            </div>
+            <div class="card-body" id="import-result-body"></div>
+          </div>
+        </section>
+
+      </div><!-- /content-area -->
+    </div><!-- /main-area -->
+  </div><!-- /dashboard -->
+
+  <!-- Delete Confirm Modal -->
+  <div class="confirm-modal" id="confirm-modal" style="display:none">
+    <div class="confirm-box">
+      <div class="confirm-icon"><i class="fas fa-trash-alt"></i></div>
+      <h3>¿Eliminar producto?</h3>
+      <p>Esta acción no se puede deshacer.</p>
+      <div class="confirm-actions">
+        <button class="btn-secondary" onclick="closeConfirm()">Cancelar</button>
+        <button class="btn-danger" id="confirm-delete-btn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm-overlay" id="confirm-overlay" onclick="closeConfirm()"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="products.js"></script>
+  <script src="vendedor.js"></script>
+</body>
+</html>
