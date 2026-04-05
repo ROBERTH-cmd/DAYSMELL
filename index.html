@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daysmell - Perfumería & Moda</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="whatsapp.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Info Bar -->
+  <div class="info-bar">
+    <div class="container">
+      <div class="info-items">
+        <div class="info-item"><i class="fas fa-box"></i><span>Envíos gratis a todo el país</span></div>
+        <div class="info-item"><i class="fas fa-sync-alt"></i><span>30 días de cambios GRATIS</span></div>
+        <div class="info-item"><i class="fas fa-truck"></i><span>Sigue tu pedido</span></div>
+        <div class="info-item"><i class="fas fa-question-circle"></i><span>Centro de ayuda</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">✦</span>
+          <h1>Daysmell</h1>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Busca producto, marca o categoría...">
+          <button class="search-button" onclick="filterProducts()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+
+        <div class="user-actions">
+          <button class="btn-login" onclick="openModal('login-modal')">
+            <i class="fas fa-user"></i> ENTRAR
+          </button>
+          <button class="btn-wishlist" title="Lista de deseos">
+            <i class="fas fa-heart"></i>
+            <span class="badge wishlist-count" id="wishlist-count">0</span>
+          </button>
+          <button class="btn-cart" onclick="openCart()" title="Carrito">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="badge cart-count" id="cart-count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="container">
+      <ul class="nav-tabs">
+        <li><button class="nav-tab active" data-tab="all" onclick="filterByCategory('all', this)"><i class="fas fa-th"></i> TODOS</button></li>
+        <li><button class="nav-tab" data-tab="sneakers" onclick="filterByCategory('sneakers', this)"><i class="fas fa-shoe-prints"></i> SNEAKERS</button></li>
+        <li><button class="nav-tab" data-tab="mujer" onclick="filterByCategory('mujer', this)"><i class="fas fa-fire" style="color:#e91e8c"></i> MUJER</button></li>
+        <li><button class="nav-tab" data-tab="hombre" onclick="filterByCategory('hombre', this)"><i class="fas fa-fire" style="color:#3b82f6"></i> HOMBRE</button></li>
+        <li><button class="nav-tab" data-tab="outlet" onclick="filterByCategory('outlet', this)"><i class="fas fa-fire" style="color:#e35d2c"></i> OUTLET</button></li>
+        <li><button class="nav-tab" data-tab="ninos" onclick="filterByCategory('ninos', this)"><i class="fas fa-baby" style="color:#eab308"></i> NIÑOS</button></li>
+        <li><button class="nav-tab" data-tab="eco" onclick="filterByCategory('eco', this)"><i class="fas fa-leaf" style="color:#22c55e"></i> ECO</button></li>
+        <li><button class="nav-tab" data-tab="perfumes" onclick="filterByCategory('perfumes', this)"><i class="fas fa-spray-can-sparkles" style="color:#a855f7"></i> PERFUMES</button></li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <div class="page-header">
+        <h2 class="page-title" id="page-title">✦ DESTACADOS</h2>
+        <div class="sort-controls">
+          <select id="sort-select" onchange="sortProducts(this.value)">
+            <option value="">Ordenar por...</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="name-asc">Nombre A-Z</option>
+            <option value="discount">Mayor descuento</option>
+          </select>
+          <span class="product-count" id="product-count">0 productos</span>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando productos...</p>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="products-container"></div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="empty-state" style="display:none;">
+        <i class="fas fa-box-open"></i>
+        <h3>No se encontraron productos</h3>
+        <p>Intenta con otra búsqueda o categoría</p>
+        <button class="btn-primary" onclick="filterByCategory('all')">Ver todos</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h2><i class="fas fa-shopping-bag"></i> Tu Carrito</h2>
+      <button class="close-cart" onclick="closeCart()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <div class="cart-empty">
+        <i class="fas fa-shopping-bag"></i>
+        <p>Tu carrito está vacío</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row"><span>Subtotal:</span><span id="cart-total">$0</span></div>
+      <div class="cart-total-row"><span>Envío:</span><span style="color:#22c55e">GRATIS</span></div>
+      <div class="cart-total-row total-final"><span>Total:</span><span id="cart-grand-total">$0</span></div>
+      <button class="btn-checkout" onclick="checkout()">
+        <i class="fas fa-lock"></i> Proceder al pago
+      </button>
+      <button class="btn-continue" onclick="closeCart()">Seguir comprando</button>
+    </div>
+  </div>
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+  <!-- Login Modal -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('login-modal')"><i class="fas fa-times"></i></button>
+      <div class="modal-header">
+        <span class="logo-icon">✦</span>
+        <h2>Bienvenido</h2>
+        <p>Inicia sesión en tu cuenta Daysmell</p>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="modal-tab" onclick="switchTab('register')">Registrarse</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="login-email" placeholder="tu@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Iniciar sesión</button>
+        <p style="text-align:center;margin-top:1rem;color:#6b7280;font-size:.85rem">¿Olvidaste tu contraseña? <a href="#" style="color:var(--accent)">Recuperar</a></p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form" style="display:none" onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="reg-name" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" id="reg-lastname" placeholder="Tu apellido" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="tu@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 8 caracteres" minlength="8" required>
+        </div>
+        <div class="form-group">
+          <label>Dirección de entrega</label>
+          <input type="text" id="reg-address" placeholder="Calle, Ciudad, Departamento">
+        </div>
+        <button type="submit" class="btn-primary btn-full">Crear cuenta</button>
+      </form>
+    </div>
+  </div>
+  <div class="modal-overlay" id="login-modal-overlay" onclick="closeModal('login-modal')"></div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ WHATSAPP FLOATING BUTTON ══ -->
+  <button class="wa-fab" id="wa-fab" onclick="openWAChat()" title="Hablar por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-pulse"></span>
+  </button>
+
+  <!-- ══ WHATSAPP CHAT WIDGET ══ -->
+  <div class="wa-widget" id="wa-widget">
+    <div class="wa-header">
+      <div class="wa-avatar"><i class="fab fa-whatsapp"></i></div>
+      <div class="wa-header-info">
+        <strong>Daysmell</strong>
+        <span class="wa-status"><span class="wa-online-dot"></span> En línea</span>
+      </div>
+      <button class="wa-close" onclick="closeWAChat()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="wa-messages" id="wa-messages">
+      <!-- Mensajes del bot aparecen aquí -->
+    </div>
+
+    <div class="wa-input-area" id="wa-input-area" style="display:none">
+      <input type="text" id="wa-input" placeholder="Escribe tu respuesta..." onkeydown="if(event.key==='Enter') sendWAMessage()">
+      <button onclick="sendWAMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+
+    <div class="wa-options" id="wa-options"></div>
+
+    <div class="wa-footer-bar">
+      <i class="fab fa-whatsapp"></i> Powered by WhatsApp
+    </div>
+  </div>
+  <div class="wa-overlay" id="wa-overlay" onclick="closeWAChat()"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <div class="footer-logo">
+            <span class="logo-icon">✦</span>
+            <h3>Daysmell</h3>
+          </div>
+          <p class="footer-desc">Tu destino de moda y fragancias con estilo único.</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/share/18c8yWTNUL/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/rchg_01" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#">Quiénes somos</a></li>
+            <li><a href="#">Trabaja con nosotros</a></li>
+            <li><a href="#">Términos y condiciones</a></li>
+            <li><a href="#">Políticas de privacidad</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Ayuda</h4>
+          <ul>
+            <li><a href="#">Cómo comprar</a></li>
+            <li><a href="#">Cambios y devoluciones</a></li>
+            <li><a href="#">Seguimiento de pedido</a></li>
+            <li><a href="#">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Métodos de pago</h4>
+          <div class="payment-methods">
+            <div class="payment-card"><i class="fab fa-cc-visa"></i></div>
+            <div class="payment-card"><i class="fab fa-cc-mastercard"></i></div>
+            <div class="payment-card"><i class="fab fa-cc-paypal"></i></div>
+            <div class="payment-card"><i class="fas fa-money-bill-wave"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Daysmell. Todos los derechos reservados.</p>
+        <a href="vendedor.html" style="font-size:.72rem;color:rgba(255,255,255,.2);margin-top:.4rem;display:inline-block;transition:.2s" onmouseover="this.style.color='rgba(255,255,255,.5)'" onmouseout="this.style.color='rgba(255,255,255,.2)'">
+          Panel de vendedores
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('daysmell_products');
+        if (saved) window.PRODUCTS = JSON.parse(saved);
+      } catch(e) {}
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+  <script src="whatsapp.js"></script>
+</body>
+</html>
