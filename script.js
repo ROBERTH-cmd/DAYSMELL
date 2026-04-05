@@ -26,7 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ─────────── PRODUCTOS ───────────
 function loadProducts() {
-  currentProducts = window.PRODUCTS || [];
+  // Esperar hasta que products.js haya cargado window.PRODUCTS
+  if (!window.PRODUCTS || window.PRODUCTS.length === 0) {
+    setTimeout(loadProducts, 100);
+    return;
+  }
+  currentProducts = window.PRODUCTS;
   renderProducts(currentProducts);
 }
 
@@ -584,3 +589,4 @@ function getCurrentFilteredProducts() {
   );
   return filtered;
 }
+
