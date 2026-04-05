@@ -1,6 +1,5 @@
 // ============================================================
 //  products.js — Catálogo de productos Daysmell
-//  Puedes editar esta lista manualmente O cargar un Excel
 // ============================================================
 
 const defaultProducts = [
