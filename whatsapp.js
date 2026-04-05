@@ -1,6 +1,5 @@
 
-const WA_NUMBER = '573202793280'; // ← PON TU NÚMERO AQUÍ (sin + ni espacios)
-
+const WA_NUMBER = '573202793280';
 // ─── ESTADO DEL CHAT ───
 let waOpen = false;
 let waStep = 0;
