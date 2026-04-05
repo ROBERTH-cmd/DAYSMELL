@@ -1,7 +1,4 @@
-// ============================================================
-//  whatsapp.js — Chat bot de pedidos + exportar a Excel
-//  ⚙️  CAMBIA ESTE NÚMERO POR EL TUYO (formato internacional)
-// ============================================================
+
 const WA_NUMBER = '573202793280'; // ← PON TU NÚMERO AQUÍ (sin + ni espacios)
 
 // ─── ESTADO DEL CHAT ───
