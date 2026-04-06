@@ -1,7 +1,3 @@
-// ============================================================
-//  products.js — Catálogo de productos Daysmell
-// ============================================================
-
 const defaultProducts = [
   {
     id: 1,
@@ -172,7 +168,4 @@ const defaultProducts = [
     es_eco: false
   }
 ];
-
-// Esta variable es la que se usa en toda la app
-// Se reemplaza cuando se carga un Excel
 window.PRODUCTS = [...defaultProducts];
