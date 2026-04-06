@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daysmell - Perfumería & Moda</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="WhatsApp.css">
+  <link rel="stylesheet" href="whatsapp.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -283,12 +283,15 @@
     </div>
   </footer>
 
-  <script src="productos.js"></script>
+  <script src="products.js"></script>
   <script>
     (function() {
       try {
-        const saved = localStorage.getItem('daysmell_products');
-        if (saved) window.PRODUCTS = JSON.parse(saved);
+        var saved = localStorage.getItem('daysmell_products');
+        if (saved) {
+          var parsed = JSON.parse(saved);
+          if (parsed && parsed.length > 0) { window.PRODUCTS = parsed; }
+        }
       } catch(e) {}
     })();
   </script>
@@ -297,3 +300,4 @@
   <script src="whatsapp.js"></script>
 </body>
 </html>
+
