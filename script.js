@@ -1,8 +1,3 @@
-// ============================================================
-//  script.js — Lógica principal de Daysmell
-// ============================================================
-
-// ─────────── ESTADO GLOBAL ───────────
 let cart = JSON.parse(localStorage.getItem('daysmell_cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('daysmell_wishlist') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('daysmell_user') || 'null');
