@@ -1,13 +1,10 @@
 
 const WA_NUMBER = '573202793280';
-// ─── ESTADO DEL CHAT ───
 let waOpen = false;
 let waStep = 0;
 let waOrder = {};
 let waTypingTimer = null;
 
-// ─── FLUJO DE PREGUNTAS ───
-// Cada paso: { key, question, type, options? }
 const WA_FLOW = [
   {
     key: null,
@@ -35,13 +32,11 @@ const FLOW_ORDER = [
   { key: 'notas',     question: '¿Alguna *nota especial* para tu pedido? _(Escribe "Ninguna" si no tienes)_', type: 'text' }
 ];
 
-// Flujo para ESTADO DE PEDIDO
 const FLOW_STATUS = [
   { key: 'nombre',    question: '¿Cuál es tu *nombre*?',                  type: 'text' },
   { key: 'telefono',  question: '¿Cuál es tu *número de pedido o teléfono* con el que realizaste la compra?', type: 'text' }
 ];
 
-// Flujo para CONSULTA
 const FLOW_QUERY = [
   { key: 'nombre',   question: '¿Cuál es tu *nombre*?',      type: 'text' },
   { key: 'consulta', question: '¿Cuál es tu *consulta*? Cuéntame con detalle.', type: 'text' }
@@ -50,7 +45,6 @@ const FLOW_QUERY = [
 let activeFlow = [];
 let activeFlowStep = 0;
 
-// ─── ABRIR / CERRAR ───
 function openWAChat() {
   waOpen = true;
   document.getElementById('wa-widget').classList.add('open');
@@ -69,7 +63,6 @@ function closeWAChat() {
   document.getElementById('wa-overlay').classList.remove('active');
 }
 
-// ─── INICIO DEL FLUJO ───
 function startFlow() {
   waOrder = { fecha: new Date().toLocaleString('es-CO'), tipo: '' };
   activeFlow = [];
@@ -109,7 +102,6 @@ function handleOptionSelect(option) {
   }
 }
 
-// ─── SIGUIENTE PREGUNTA ───
 function askNext() {
   if (activeFlowStep >= activeFlow.length) {
     finishFlow();
@@ -130,7 +122,6 @@ function askNext() {
   });
 }
 
-// ─── ENVIAR MENSAJE USUARIO ───
 function sendWAMessage() {
   const input = document.getElementById('wa-input');
   const text = input.value.trim();
@@ -170,7 +161,6 @@ function finishFlow() {
   const orderNum = 'DS-' + Date.now().toString().slice(-6);
   waOrder.numero_pedido = orderNum;
 
-  // Guardar en localStorage
   saveOrderToStorage(waOrder);
 
   botTyping(1000, () => {
