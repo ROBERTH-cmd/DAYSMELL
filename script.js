@@ -4,14 +4,12 @@ let currentUser = JSON.parse(localStorage.getItem('daysmell_user') || 'null');
 let currentCategory = 'all';
 let currentProducts = [];
 
-// ─────────── INICIALIZACIÓN ───────────
 document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   updateWishlistUI();
   updateUserUI();
   loadProducts();
 
-  // Buscar en tiempo real
   const searchInput = document.getElementById('search-input');
   if (searchInput) {
     searchInput.addEventListener('input', debounce(filterProducts, 300));
@@ -19,9 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ─────────── PRODUCTOS ───────────
+
 function loadProducts() {
-  // Esperar hasta que products.js haya cargado window.PRODUCTS
   if (!window.PRODUCTS || window.PRODUCTS.length === 0) {
     setTimeout(loadProducts, 100);
     return;
@@ -65,7 +62,7 @@ function buildProductCard(p, idx) {
   else if (p.es_nuevo) badge = `<span class="product-badge badge-new">NUEVO</span>`;
   else if (tieneDescuento) badge = `<span class="product-badge badge-sale">-${p.descuento}%</span>`;
 
-  // Stock
+
   const stockInfo = p.stock === 0
     ? `<span class="product-stock stock-out"><i class="fas fa-times-circle"></i> Sin stock</span>`
     : p.stock <= 3
@@ -105,10 +102,8 @@ function buildProductCard(p, idx) {
   </div>`;
 }
 
-// ─────────── FILTROS ───────────
 function filterByCategory(cat, btn) {
   currentCategory = cat;
-  // Actualizar tabs activos
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
@@ -149,7 +144,6 @@ function applyFilters() {
     );
   }
 
-  // Aplicar orden actual
   const sortVal = document.getElementById('sort-select')?.value;
   if (sortVal) filtered = applySortTo(filtered, sortVal);
 
@@ -171,7 +165,6 @@ function applySortTo(arr, val) {
   }
 }
 
-// ─────────── CARRITO ───────────
 function addToCart(productId) {
   const product = window.PRODUCTS.find(p => p.id === productId);
   if (!product || product.stock === 0) return;
@@ -288,8 +281,6 @@ function checkout() {
   updateCartUI();
   closeCart();
 }
-
-// ─────────── WISHLIST ───────────
 function toggleWishlist(productId, btn) {
   const idx = wishlist.indexOf(productId);
   if (idx === -1) {
@@ -310,8 +301,6 @@ function toggleWishlist(productId, btn) {
 function updateWishlistUI() {
   document.querySelectorAll('.wishlist-count').forEach(el => el.textContent = wishlist.length);
 }
-
-// ─────────── AUTENTICACIÓN ───────────
 function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim();
@@ -376,8 +365,6 @@ function updateUserUI() {
     loginBtn.onclick = () => openModal('login-modal');
   }
 }
-
-// ─────────── MODALS ───────────
 function openModal(id) {
   document.getElementById(id)?.classList.add('active');
   document.getElementById(id + '-overlay')?.classList.add('active');
@@ -403,8 +390,6 @@ function switchTab(tab) {
     regForm.style.display = 'flex'; loginForm.style.display = 'none';
   }
 }
-
-// ─────────── EXCEL IMPORT ───────────
 function handleExcelUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -447,7 +432,6 @@ function handleExcelUpload(event) {
 }
 
 function parseExcelRow(row, rowNum) {
-  // Campos aceptados (insensible a mayúsculas y espacios)
   const get = (keys) => {
     for (const k of keys) {
       const found = Object.keys(row).find(rk => rk.trim().toLowerCase() === k.toLowerCase());
@@ -485,8 +469,6 @@ function parseExcelRow(row, rowNum) {
     es_eco
   };
 }
-
-// ─────────── DESCARGAR PLANTILLA EXCEL ───────────
 function downloadTemplate() {
   const templateData = [
     {
@@ -531,8 +513,6 @@ function downloadTemplate() {
   ];
 
   const ws = XLSX.utils.json_to_sheet(templateData);
-
-  // Ajustar ancho de columnas
   ws['!cols'] = [
     {wch:25},{wch:15},{wch:12},{wch:12},{wch:15},{wch:10},{wch:8},{wch:60},{wch:40},{wch:6},{wch:6}
   ];
@@ -542,8 +522,6 @@ function downloadTemplate() {
   XLSX.writeFile(wb, 'Daysmell_Plantilla_Productos.xlsx');
   showToast('✅ Plantilla descargada. Llénala y súbela.', 'success');
 }
-
-// ─────────── UTILIDADES ───────────
 function formatCurrency(amount) {
   if (!amount && amount !== 0) return '$0';
   return new Intl.NumberFormat('es-CO', {
