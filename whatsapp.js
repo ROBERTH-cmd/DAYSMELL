@@ -1,4 +1,3 @@
-
 const WA_NUMBER = '573202793280';
 let waOpen = false;
 let waStep = 0;
@@ -14,7 +13,7 @@ const WA_FLOW = [
   },
   {
     key: 'intent',
-    question: null, // se resuelve según opción
+    question: null,
     type: 'branch'
   }
 ];
